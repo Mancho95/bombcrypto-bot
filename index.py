@@ -598,12 +598,8 @@ def main():
             last["refresh_heroes"] = now
             logger('Refreshing Heroes Positions.')
             refreshHeroesPositions()
-
-        if now - last["change_browser"] > t['change_operating_browser'] * 60 :
-            last["change_browser"] = now
-            sys.stdout.write('\nChanging browser\n')
-            changeBrowser()
             
+        
         #clickBtn(teasureHunt)
         logger(None, progress_indicator=True)
 

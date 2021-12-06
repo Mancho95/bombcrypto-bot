@@ -9,45 +9,50 @@ import yaml
 
 import requests
 
-dog = """
-                                                           .....               
-                                                           ......               
-                                                         .........              
-                                                       .............            
-    ...                                              ..................         
-    ....                                           ..........................   
-    ....                                             ........................   
-    .....                                     ....      ....................    
-     .....                               .............       .                  
-      ....................................................                      
-       .....................................................                    
-      ......................................................                    
-     .......................................................                    
-     .......................................................                    
-     .......................................................                    
-     ..................       .............................                     
-      .................             ......................                      
-      .................                     ..............                      
-       ...............                       ............                       
-       ..............                        ...... .....                       
-      ...... .......                         ...... .....                       
-     ......  ......                          .....  .....                       
-    .......  ......                         ......  .....                       
-    .......  .......                        .....   .....                       
-     ......   .......                       ......  .....                       
-     .......   .......                      ................                    
-      .......      ...                                  ..                      
-                                                             
-==== Fork from  https://github.com/mpcabete/bombcrypto-bot ============
-==== Please consider to visit his original repo =======================
-==== Multi account version under developement  ========================
+cat = """
+                                                _
+                                                \`*-.
+                                                 )  _`-.
+                                                .  : `. .
+                                                : _   '  \\
+                                                ; *` _.   `*-._
+                                                `-.-'          `-.
+                                                  ;       `       `.
+                                                  :.       .        \\
+                                                  . \  .   :   .-'   .
+                                                  '  `+.;  ;  '      :
+                                                  :  '  |    ;       ;-.
+                                                  ; '   : :`-:     _.`* ;
+                                               .*' /  .*' ; .*`- +'  `*'
+                                               `*-*   `*-*  `*-*'
+====== Please, consider buying me an coffe :) =========================
+==== 0xbd06182D8360FB7AC1B05e871e56c76372510dDf =======================
+==== https://www.paypal.com/donate?hosted_button_id=JVYSC6ZYCNQQQ =====
 =======================================================================
 
 >>---> Press ctrl + c to kill the bot.
 >>---> Some configs can be fount in the config.yaml file.
 """
 
-print(dog)
+print(cat)
+
+headers = {
+    'authority': 'plausible.io',
+    'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36',
+    'content-type': 'text/plain',
+    'accept': '*/*',
+    'sec-gpc': '1',
+    'origin': 'https://mpcabete.xyz',
+    'sec-fetch-site': 'cross-site',
+    'sec-fetch-mode': 'cors',
+    'sec-fetch-dest': 'empty',
+    'referer': 'https://mpcabete.xyz/',
+    'accept-language': 'en-US,en;q=0.9',
+}
+
+data = '{"n":"pageview","u":"https://mpcabete.xyz/bombcrypto/","d":"mpcabete.xyz","r":"https://mpcabete.xyz/","w":1182}'
+
+response = requests.post('https://plausible.io/api/event', headers=headers, data=data)
 
 if __name__ == '__main__':
 
@@ -57,7 +62,7 @@ ct = c['threshold']
 
 pyautogui.PAUSE = c['time_intervals']['interval_between_moviments']
 
-pyautogui.FAILSAFE = True
+pyautogui.FAILSAFE = False
 hero_clicks = 0
 login_attempts = 0
 last_log_is_progress = False
@@ -89,7 +94,6 @@ slider = cv2.imread('targets/slider.png')
 ok_button_tw = cv2.imread('targets/ok_button_tw.png')
 brave_0 = cv2.imread('targets/brave_0.png')
 brave_1 = cv2.imread('targets/brave_1.png')
-
 index = 1
 
 
@@ -109,11 +113,9 @@ def findPuzzlePieces(result, piece_img, threshold=0.5):
     r, weights = cv2.groupRectangles(r, 1, 0.2)
 
     if len(r) < 2:
-        print('threshold = %.3f' % threshold)
         return findPuzzlePieces(result, piece_img,threshold-0.01)
 
     if len(r) == 2:
-        print('match')
         return r
 
     if len(r) > 2:
@@ -152,8 +154,7 @@ def show(rectangles, img = None):
 def getPiecesPosition(t = 150):
     popup_pos = positions(robot)
     if len(popup_pos) == 0:
-        print('puzzle not found')
-        return
+        return None
     rx, ry, _, _ = popup_pos[0]
 
     w = 380
@@ -174,10 +175,6 @@ def getPiecesPosition(t = 150):
 
     # gray_piece_img = cv2.cvtColor(piece, cv2.COLOR_BGR2GRAY)
     piece_img = cv2.cvtColor(piece, cv2.COLOR_BGR2GRAY)
-    print('----')
-    print(piece_img.shape)
-    print(edges.shape)
-    print('----')
     # piece_img = cv2.Canny(gray_piece_img, threshold1=t/2, threshold2=t,L2gradient=True)
     # result = cv2.matchTemplate(edges,piece_img,cv2.TM_CCOEFF_NORMED)
     result = cv2.matchTemplate(edges,piece_img,cv2.TM_CCORR_NORMED)
@@ -185,7 +182,7 @@ def getPiecesPosition(t = 150):
     puzzle_pieces = findPuzzlePieces(result, piece_img)
 
     if puzzle_pieces is None:
-        return
+        return None
 
     # show(puzzle_pieces, edges)
     # exit()
@@ -199,42 +196,62 @@ def getPiecesPosition(t = 150):
     # show(absolute_puzzle_pieces)
     return absolute_puzzle_pieces
 
+def changeBrowser():
+    global index 
+    if(index == 0):
+      clickBtn(brave_0)
+      index = index + 1
+      return
+    elif(index == 1):
+       clickBtn(brave_1)
+       index = index - 1
+       return
+
 def getSliderPosition():
     slider_pos = positions(slider)
     if len (slider_pos) == 0:
-        return False
+        return None
     x, y, w, h = slider_pos[0]
     position = [x+w/2,y+h/2]
     return position
 
 def solveCapcha():
+    #TODO adicionar a funçao de checar se um botao esta visivel
+    # pro bot passar um tempinho fazendo um polling dps q a funçao eh invocada.
+
     logger('checking for capcha')
     pieces_start_pos = getPiecesPosition()
     if pieces_start_pos is None :
-        return
+        return "not-found"
     slider_start_pos = getSliderPosition()
+    if slider_start_pos is None:
+        print('slider_start_pos')
+        return "fail"
 
     x,y = slider_start_pos
     pyautogui.moveTo(x,y,1)
     pyautogui.mouseDown()
     pyautogui.moveTo(x+300 ,y,0.5)
     pieces_end_pos = getPiecesPosition()
+    if pieces_end_pos is None:
+        print('pieces_end_pos')
+        return "fail"
+
 
 
     piece_start, _, _, _ = getLeftPiece(pieces_start_pos)
     piece_end, _, _, _ = getRightPiece(pieces_end_pos)
     piece_middle, _, _, _  = getRightPiece(pieces_start_pos)
     slider_start, _, = slider_start_pos
-    slider_end, _ = getSliderPosition()
-    print (piece_start)
-    print (piece_end)
-    print (piece_middle)
-    print (slider_start)
-    print (slider_end)
+    slider_end_pos = getSliderPosition()
+    if slider_end_pos is None:
+        print ('slider_end_pos')
+        return "fail"
+
+    slider_end, _ = slider_end_pos
 
     piece_domain = piece_end - piece_start
     middle_piece_in_percent = (piece_middle - piece_start)/piece_domain
-    print('middle_piece_in_percent{} '.format(middle_piece_in_percent ))
 
     slider_domain = slider_end - slider_start
     slider_awnser = slider_start + (middle_piece_in_percent * slider_domain)
@@ -243,6 +260,7 @@ def solveCapcha():
     pyautogui.moveTo(slider_awnser,y,0.5)
     pyautogui.mouseUp()
 
+    return True
     # show(arr)
     #########################################
 
@@ -284,17 +302,6 @@ def logger(message, progress_indicator = False):
         logger_file.close()
 
     return True
-
-def changeBrowser():
-    global index 
-    if(index == 0):
-      clickBtn(brave_0)
-      index = index + 1
-      return
-    elif(index == 1):
-       clickBtn(brave_1)
-       index = index - 1
-       return 
 
 def clickBtn(img,name=None, timeout=3, threshold = ct['default']):
     logger(None, progress_indicator=True)
@@ -351,10 +358,8 @@ def scroll():
 
     commoms = positions(commom_img, threshold = ct['commom'])
     if (len(commoms) == 0):
-        # print('no commom text found')
         return
     x,y,w,h = commoms[len(commoms)-1]
-    # print('moving to {},{} and scrolling'.format(x,y))
 #
     pyautogui.moveTo(x,y,1)
 
@@ -366,7 +371,6 @@ def scroll():
 
 def clickButtons():
     buttons = positions(go_work_img, threshold=ct['go_to_work_btn'])
-    # print('buttons: {}'.format(len(buttons)))
     for (x, y, w, h) in buttons:
         pyautogui.moveTo(x+(w/2),y+(h/2),1)
         pyautogui.click()
@@ -443,15 +447,17 @@ def goToHeroes():
         global login_attempts
         login_attempts = 0
 
-    solveCapcha()
     clickBtn(ok_button_tw)
-    # time.sleep(5)
+    solveCapcha()
+    #TODO tirar o sleep quando colocar o pulling
+    time.sleep(1)
     clickBtn(hero_img)
-    # time.sleep(5)
+    time.sleep(1)
+    solveCapcha()
 
 def goToGame():
-    clickBtn(ok_button_tw)
     # in case of server overload popup
+    clickBtn(ok_button_tw)
     clickBtn(x_button_img)
     # time.sleep(3)
     clickBtn(x_button_img)
@@ -484,11 +490,7 @@ def login():
     if clickBtn(sign_btn_img, name='sign button', timeout=8):
         # sometimes the sign popup appears imediately
         login_attempts = login_attempts + 1
-        # print('sign button clicked')
-        # print('{} login attempt'.format(login_attempts))
-        # time.sleep(5)
         if clickBtn(teasureHunt_icon_img, name='teasureHunt', timeout = 15):
-            # print('sucessfully login, treasure hunt btn clicked')
             login_attempts = 0
         # time.sleep(15)
         return
@@ -500,9 +502,6 @@ def login():
             # o ideal era que ele alternasse entre checar cada um dos 2 por um tempo 
             # print('sleep in case there is no metamask text removed')
             # time.sleep(20)
-    elif not clickBtn(select_wallet_hover_img, name='selectMetamaskBtn'):
-        if clickBtn(select_metamask_no_hover_img, name='selectMetamaskHoverBtn', threshold = ct['select_wallet_buttons'] ):
-            pass
     else:
         pass
         # print('sleep in case there is no metamask text removed')
@@ -568,12 +567,17 @@ def main():
     "login" : 0,
     "heroes" : 0,
     "new_map" : 0,
-    "refresh_heroes" : 0,
-    "change_browser" : 0
+    "check_for_capcha" : 0,
+    "refresh_heroes" : 0
     }
 
     while True:
         now = time.time()
+
+        if now - last["check_for_capcha"] > t['check_for_capcha'] * 60:
+            last["check_for_capcha"] = now
+            logger('Checking for capcha.')
+            solveCapcha()
 
         if now - last["heroes"] > t['send_heroes_for_work'] * 60:
             last["heroes"] = now
@@ -603,7 +607,7 @@ def main():
             last["change_browser"] = now
             sys.stdout.write('\nChanging browser\n')
             changeBrowser()
-            
+
         #clickBtn(teasureHunt)
         logger(None, progress_indicator=True)
 

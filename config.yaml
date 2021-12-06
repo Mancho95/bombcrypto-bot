@@ -26,6 +26,13 @@
     # Valor padrão (em minutos): 3
     check_for_new_map_button: 3
     
+    # [en_US] Time interval to check for capcha.
+    # Default value (in minutes): 1
+    #
+    # [pt_BR] Intervalo de tempo para verificar se precisa resolver o capcha.
+    # Valor padrão (em minutos): 1
+    check_for_capcha: 1
+
     # [en_US] Time interval to check for login request
     # Default value (in minutes): 3
     #
@@ -39,7 +46,7 @@
     # [pt_BR] Intervalo de tempo entre movimentos
     # Valor padrão (em segundos): 1
     interval_between_moviments: 1
-    change_operating_browser: 4
+    change_operating_browser: 5
 
   # [en_US] How confident the bot needs to be to click the buttons (values from 0 to 1. 0 is the minimum value, 1 is the maximum value)
   #

@@ -568,7 +568,8 @@ def main():
     "heroes" : 0,
     "new_map" : 0,
     "check_for_capcha" : 0,
-    "refresh_heroes" : 0
+    "refresh_heroes" : 0,
+    "change_browser" : 0
     }
 
     while True:

@@ -20,18 +20,18 @@
     refresh_heroes_positions: 3
     
     # [en_US] Time interval to check for new maps
-    # Default value (in minutes): 3 
+    # Default value (in minutes): 5 
     #
     # [pt_BR] Intervalo de tempo para verificar por novos mapas
-    # Valor padrão (em minutos): 3
-    check_for_new_map_button: 3
+    # Valor padrão (em segundos): 5
+    check_for_new_map_button: 5
     
-    # [en_US] Time interval to check for capcha.
+    # [en_US] Time interval to check for captcha.
     # Default value (in minutes): 1
     #
-    # [pt_BR] Intervalo de tempo para verificar se precisa resolver o capcha.
+    # [pt_BR] Intervalo de tempo para verificar se precisa resolver o captcha.
     # Valor padrão (em minutos): 1
-    check_for_capcha: 1
+    check_for_captcha: 1
 
     # [en_US] Time interval to check for login request
     # Default value (in minutes): 3
@@ -46,7 +46,6 @@
     # [pt_BR] Intervalo de tempo entre movimentos
     # Valor padrão (em segundos): 1
     interval_between_moviments: 1
-    change_operating_browser: 5
 
   # [en_US] How confident the bot needs to be to click the buttons (values from 0 to 1. 0 is the minimum value, 1 is the maximum value)
   #
@@ -87,6 +86,14 @@
     # [pt_BR]
     # Valor padrão: 0.9
     green_bar: 0.9
+
+  home:
+    enable: False
+    # If bot is sending the wrong hero home, make this number bigger.
+    # if bot is not sending any hero home make this number smaller.
+    hero_threshold: 0.8
+    home_button_threshold: 0.9
+
 
   # [en_US]
   # Default value: 60
@@ -138,4 +145,4 @@
   # [pt_BR] Opção para salvar os logs em arquivo (logs.txt)
   # Valor padrão : False
   # Opções disponíveis: False ou True
-  save_log_to_file: False
+  save_log_to_file: True
